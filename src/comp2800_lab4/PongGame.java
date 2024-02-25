@@ -39,7 +39,9 @@ public class PongGame {
     /*
      *  Constructor to initialize the PongGame
      */
-    
+    private Ball ball;
+    private Timer timer;
+
     public PongGame() {
         initialize();
     }
@@ -50,8 +52,8 @@ public class PongGame {
     public void initialize() {
         mainframe = new JFrame();
         mainframe.setTitle("Welcome to Pong game");
-        mainframe.setSize(900, 800);
-        mainframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        mainframe.setSize(900, 700);
+        mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainframe.setLayout(new BorderLayout());
         mainframe.setLocationRelativeTo(null);
 //        mainframe.setResizable(false);
@@ -129,9 +131,23 @@ public class PongGame {
                 }
             }
         });
+        ball = new Ball(mainframe.getWidth() / 2, mainframe.getHeight() / 2, 20); // Adjust the diameter as needed
+        arena.add(ball);
+        ball.setBounds(mainframe.getWidth() / 2 - ball.diameter / 2, mainframe.getHeight() / 2 - ball.diameter / 2, ball.diameter, ball.diameter);
 
+        ball.repaint();
+        arena.repaint();
         mainframe.add(arena, BorderLayout.CENTER);
-    }
+        
+        timer = new Timer(400, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ball.move(mainframe.getWidth(), mainframe.getHeight(),leftPaddle,rightPaddle); // Call the move() method of the ball
+                ball.repaint();
+                System.out.println("Log: Moving Ball X:"+ ball.getX()+ " Y :"+ball.getY());
+            }
+        });
+        
+       timer.start() ;   }
 
     /*
      * Changes the paddles location automatically when screen is resized
@@ -197,13 +213,13 @@ public class PongGame {
         rightPaddle.setLocation(rightPaddle.getX(), rightPaddle_Y);
     }
     /* 
-     * Method to add menu to menubar with options
+     * Method to add Menu to MenuBar with options
      * 
-     * flow : option >> menu >> menubar 
+     * flow : JOption >> menu >> MenuBar 
      * 
      * */
     private void add_menu_to_menu_bar(JMenuBar bar) {
-        menu = new JMenu();
+        menu = new JMenu("Help");
       
         JMenuItem option_start = new JMenuItem("Start");
         JMenuItem option_restart = new JMenuItem("Restart");
@@ -214,14 +230,40 @@ public class PongGame {
         menu.add(option_speed);
         menu.add(option_quit);
 
-        bar.setBackground(Color.white);
+        bar.setBackground(Color.GREEN);
         bar.add(menu);
 
         option_quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	
                 mainframe.dispose();
             }
         });
+        
+        option_restart.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				timer.stop();
+
+			}
+		});
+        
+        option_start.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				timer.start();
+			}
+		});
+        
+        option_speed.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
     }
     public static void main(String[] args) {
 		// Run this program on the Event Dispatch Thread (EDT)
