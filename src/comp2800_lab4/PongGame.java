@@ -36,12 +36,17 @@ public class PongGame {
      * */
     private final int PADDLE_SPEED = 60; // Paddle movement speed
 
-    // Constructor to initialize the PongGame
+    /*
+     *  Constructor to initialize the PongGame
+     */
+    
     public PongGame() {
         initialize();
     }
-
-    // Method to initialize the GUI components
+    /*
+     * Method to initialize the GUI components
+     * 
+     * */
     public void initialize() {
         mainframe = new JFrame();
         mainframe.setTitle("Welcome to Pong game");
@@ -62,11 +67,20 @@ public class PongGame {
         mainframe.add(menu_panel, BorderLayout.NORTH);
     }
 
-    // Method to display the main frame
+    /*
+     * Method to display the main frame
+     * */
     public void show() {
         mainframe.setVisible(true);
     }
 
+    /*	
+     * Method to Create Arena
+     * flow :	 left paddle >> Arena 
+     * 			 right paddle >> Arena
+     * 			 divider >> Arena
+     * 			 Arena >> Mainframe
+     * */
     private void create_arena() {
         arena = new JPanel();
         arena.setBackground(Color.BLACK);
@@ -100,7 +114,7 @@ public class PongGame {
                 adjustComponentsOnResize();
             }
         });
-
+        // Adding key listener for keys and calling respective method to update paddle location
         mainframe.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
@@ -119,6 +133,10 @@ public class PongGame {
         mainframe.add(arena, BorderLayout.CENTER);
     }
 
+    /*
+     * Changes the paddles location automatically when screen is resized
+     * 
+     * */
     private void adjustComponentsOnResize() {
         int oldHeight = mainframe.getHeight();
         int oldWidth = mainframe.getWidth();
@@ -133,7 +151,10 @@ public class PongGame {
         divider.setBounds(dividerX, 0, 2, mainframe.getHeight());
     }
 
-
+    /* 
+     * Method to move left paddle Down
+     * 
+     * */
     private void moveLeftPaddleDown() {
         leftPaddle_Y += PADDLE_SPEED;
         if (leftPaddle_Y + leftPaddle.getHeight() > mainframe.getHeight()) {
@@ -141,7 +162,11 @@ public class PongGame {
         }
         leftPaddle.setLocation(leftPaddle.getX(), leftPaddle_Y);
     }
-
+    /* 
+     * Method to move left paddle up
+     * 
+     * */
+    
     private void moveLeftPaddleUp() {
         leftPaddle_Y -= PADDLE_SPEED;
         if (leftPaddle_Y < 0) {
@@ -149,7 +174,10 @@ public class PongGame {
         }
         leftPaddle.setLocation(leftPaddle.getX(), leftPaddle_Y);
     }
-
+    /* 
+     * Method to move right paddle Down
+     * 
+     * */
     private void moveRightPaddleDown() {
         rightPaddle_Y += PADDLE_SPEED;
         if (rightPaddle_Y + rightPaddle.getHeight() > mainframe.getHeight()) {
@@ -157,7 +185,10 @@ public class PongGame {
         }
         rightPaddle.setLocation(rightPaddle.getX(), rightPaddle_Y);
     }
-
+    /* 
+     * Method to move right paddle up
+     * 
+     * */
     private void moveRightPaddleUp() {
         rightPaddle_Y -= PADDLE_SPEED;
         if (rightPaddle_Y < 0) {
@@ -165,7 +196,12 @@ public class PongGame {
         }
         rightPaddle.setLocation(rightPaddle.getX(), rightPaddle_Y);
     }
-
+    /* 
+     * Method to add menu to menubar with options
+     * 
+     * flow : option >> menu >> menubar 
+     * 
+     * */
     private void add_menu_to_menu_bar(JMenuBar bar) {
         menu = new JMenu();
       
