@@ -4,23 +4,37 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class PongGame {
+	
+	
     private JFrame mainframe;
     private JPanel menu_panel;
     private JMenuBar menu_bar;
     private JMenu menu;
-    private JMenuItem option_start;
-    private JMenuItem option_restart;
-    private JMenuItem option_speed;
-    private JMenuItem option_quit;
-
+  
+    
+    /*Creating Arena Panel, Left paddle, Right Paddle
+     * and the divider line
+  
+     * */
     private JPanel arena;
     private JPanel leftPaddle;
     private JPanel rightPaddle;
     private JLabel divider;
 
-    private int leftPaddle_Y = 0; // Y-coordinate of the left paddle
-    private int rightPaddle_Y = 0; // Y-coordinate of the right paddle
-    private final int PADDLE_SPEED = 10; // Paddle movement speed
+    /*
+     *Creating Vars to store Coordinates
+     *of left and right Paddle
+     * 
+     * */
+    private int leftPaddle_Y ; // Y-coordinate of the left paddle
+    private int rightPaddle_Y; // Y-coordinate of the right paddle
+    private int leftPaddle_X ; // Y-coordinate of the left paddle
+    private int rightPaddle_X ; // Y-coordinate of the right paddle
+    
+    /*Default Paddle speed
+     * Will change it once we know the ball speed to make he game fair
+     * */
+    private final int PADDLE_SPEED = 60; // Paddle movement speed
 
     // Constructor to initialize the PongGame
     public PongGame() {
@@ -54,29 +68,32 @@ public class PongGame {
     }
 
     private void create_arena() {
-        this.arena = new JPanel();
-        this.arena.setBackground(Color.BLACK);
-        this.arena.setLayout(null);
+        arena = new JPanel();
+        arena.setBackground(Color.BLACK);
+        arena.setLayout(null);
 
         leftPaddle_Y = (mainframe.getHeight() - 100) / 2;
         rightPaddle_Y = (mainframe.getHeight() - 100) / 2;
 
+        leftPaddle_X = mainframe.getWidth() / 20; // 5% from the left side
+        rightPaddle_X = mainframe.getWidth() - (mainframe.getWidth() / 20) - 20; // 5% from the right side
+
         leftPaddle = new JPanel();
         leftPaddle.setBackground(Color.WHITE);
-        leftPaddle.setBounds(20, leftPaddle_Y, 20, 100);
-        this.arena.add(leftPaddle);
+        leftPaddle.setBounds(leftPaddle_X, leftPaddle_Y, 20, 100);
+        arena.add(leftPaddle);
 
         rightPaddle = new JPanel();
         rightPaddle.setBackground(Color.WHITE);
-        rightPaddle.setBounds(860, rightPaddle_Y, 20, 100);
-        this.arena.add(rightPaddle);
+        rightPaddle.setBounds(rightPaddle_X, rightPaddle_Y, 20, 100);
+        arena.add(rightPaddle);
 
         int dividerX = (mainframe.getWidth() / 2) - 1;
         divider = new JLabel();
         divider.setBackground(Color.WHITE);
         divider.setOpaque(true);
         divider.setBounds(dividerX, 0, 2, mainframe.getHeight());
-        this.arena.add(divider);
+        arena.add(divider);
 
         mainframe.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
@@ -103,15 +120,21 @@ public class PongGame {
     }
 
     private void adjustComponentsOnResize() {
-        leftPaddle_Y = (mainframe.getHeight() - 100) / 2;
-        rightPaddle_Y = (mainframe.getHeight() - 100) / 2;
+        int oldHeight = mainframe.getHeight();
+        int oldWidth = mainframe.getWidth();
+
+        leftPaddle_Y = (leftPaddle_Y * mainframe.getHeight()) / oldHeight;
+        rightPaddle_Y = (rightPaddle_Y * mainframe.getHeight()) / oldHeight;
+
         leftPaddle.setBounds(20, leftPaddle_Y, 20, 100);
         rightPaddle.setBounds(mainframe.getWidth() - 40, rightPaddle_Y, 20, 100);
+
         int dividerX = (mainframe.getWidth() / 2) - 1;
         divider.setBounds(dividerX, 0, 2, mainframe.getHeight());
     }
 
-    protected void moveLeftPaddleDown() {
+
+    private void moveLeftPaddleDown() {
         leftPaddle_Y += PADDLE_SPEED;
         if (leftPaddle_Y + leftPaddle.getHeight() > mainframe.getHeight()) {
             leftPaddle_Y = mainframe.getHeight() - leftPaddle.getHeight();
@@ -119,7 +142,7 @@ public class PongGame {
         leftPaddle.setLocation(leftPaddle.getX(), leftPaddle_Y);
     }
 
-    protected void moveLeftPaddleUp() {
+    private void moveLeftPaddleUp() {
         leftPaddle_Y -= PADDLE_SPEED;
         if (leftPaddle_Y < 0) {
             leftPaddle_Y = 0;
@@ -127,7 +150,7 @@ public class PongGame {
         leftPaddle.setLocation(leftPaddle.getX(), leftPaddle_Y);
     }
 
-    protected void moveRightPaddleDown() {
+    private void moveRightPaddleDown() {
         rightPaddle_Y += PADDLE_SPEED;
         if (rightPaddle_Y + rightPaddle.getHeight() > mainframe.getHeight()) {
             rightPaddle_Y = mainframe.getHeight() - rightPaddle.getHeight();
@@ -135,7 +158,7 @@ public class PongGame {
         rightPaddle.setLocation(rightPaddle.getX(), rightPaddle_Y);
     }
 
-    protected void moveRightPaddleUp() {
+    private void moveRightPaddleUp() {
         rightPaddle_Y -= PADDLE_SPEED;
         if (rightPaddle_Y < 0) {
             rightPaddle_Y = 0;
@@ -144,26 +167,36 @@ public class PongGame {
     }
 
     private void add_menu_to_menu_bar(JMenuBar bar) {
-        this.menu = new JMenu();
-
-        this.option_start = new JMenuItem("Start");
-        this.option_restart = new JMenuItem("Restart");
-        this.option_speed = new JMenuItem("Speed");
-        this.option_quit = new JMenuItem("Quit");
-        this.menu.add(option_start);
-        this.menu.add(option_restart);
-        this.menu.add(option_speed);
-        this.menu.add(option_quit);
+        menu = new JMenu();
+      
+        JMenuItem option_start = new JMenuItem("Start");
+        JMenuItem option_restart = new JMenuItem("Restart");
+        JMenuItem option_speed = new JMenuItem("Speed");
+        JMenuItem option_quit = new JMenuItem("Quit");
+        menu.add(option_start);
+        menu.add(option_restart);
+        menu.add(option_speed);
+        menu.add(option_quit);
 
         bar.setBackground(Color.white);
         bar.add(menu);
 
-        this.option_quit.addActionListener(new ActionListener() {
+        option_quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainframe.dispose();
             }
         });
     }
-
+    public static void main(String[] args) {
+		// Run this program on the Event Dispatch Thread (EDT)
+		EventQueue.invokeLater(new Runnable() {
+			//creating instance of mainframe and using show method to set frame to visible
+			public void run() {	
+				 	//Creating PieChart instance and then calling the show method to setvisibility true
+					PongGame game =new PongGame();
+					game.show();
+			}
+		});
+	}
    
 }
