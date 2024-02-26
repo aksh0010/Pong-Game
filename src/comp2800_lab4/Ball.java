@@ -7,11 +7,11 @@ import javax.swing.JPanel;
 
 public class Ball extends JPanel {
 	
-    private static final int BALL_SPEED = 40;
+    private static final int BALL_SPEED = 20;
 	private int x, y;
-	int diameter;
+	private int diameter;
     private int dx = 1, dy = 1;
-
+    private int speedX ,speedY;
     public Ball(int x, int y, int diameter) {
         this.x = x;
         this.y = y;
@@ -20,10 +20,25 @@ public class Ball extends JPanel {
         setBounds(this.x, this.y, getPreferredSize().width, getPreferredSize().height);
         // Generate random initial directions
         Random random = new Random();
-        dx = random.nextBoolean() ? 1 : -1; // Randomly choose between 1 and -1
-        dy = random.nextBoolean() ? 1 : -1; // Randomly choose between 1 and -1
+//        dx = random.nextBoolean() ? 1 : -1; // Randomly choose between 1 and -1
+//        dy = random.nextBoolean() ? 1 : -1; // Randomly choose between 1 and -1
+//        
+        dx = random.nextInt(3) - 1;
+        dy = random.nextInt(3) - 1;
+        
+        while (dx == 0 || dy == 0) {
+            dx = random.nextInt(3) - 1;
+            dy = random.nextInt(3) - 1;
+        }
     }
-
+    public void reset(int initialX, int initialY, int initialSpeedX, int initialSpeedY) {
+        this.x = initialX;
+        this.y = initialY;
+        x += dx * BALL_SPEED;
+        y += dy * BALL_SPEED;
+        this.speedX = initialSpeedX;
+        this.speedY = initialSpeedY;
+    }
     public int getX() {
         return x;
     }
@@ -32,7 +47,7 @@ public class Ball extends JPanel {
         return y;
     }
 
-    public void move(int frameWidth, int frameHeight, JPanel leftpaddle , JPanel rightpaddle) {
+    public boolean move(int frameWidth, int frameHeight, JPanel leftpaddle , JPanel rightpaddle) {
         // Previous bounds
         Rectangle oldBounds = getBounds();
 
@@ -42,25 +57,31 @@ public class Ball extends JPanel {
         if (leftpaddle.getBounds().intersects(getBounds())) {
         	reflectHorizontally(); // Reverse horizontal direction
             x = leftpaddle.getX() + leftpaddle.getWidth();
-        	System.out.println("888888888888888888888888888888888888888888");
+        	System.out.println("LeftPaddle");
             
-        } else
-
-     // Check for collision with the right paddle
-        if (rightpaddle.getBounds().intersects(getBounds())) {
+        } else if (rightpaddle.getBounds().intersects(getBounds())) {
+            // Check for collision with the right paddle
             reflectHorizontally(); // Change horizontal direction
             x = rightpaddle.getX() - diameter; // Set x-coordinate to the left edge of the right paddle
             // Adjust y-coordinate based on the collision point
             y = Math.max(rightpaddle.getY() - diameter, Math.min(y, rightpaddle.getY() + rightpaddle.getHeight()));
+            System.out.println("RightPaddle");
         }
         // Check for collision with the left or right boundary
         else if (x <= 0 || x + diameter >= frameWidth) {
-            reflectHorizontally(); // Change horizontal direction
+        	 System.out.println("Touched Sides");
+        	 return false;
+//            reflectHorizontally(); // Change horizontal direction
+           
+           
         }
 
         // Check for collision with the top or bottom boundary
         else if (y <= 0 || y + diameter >= frameHeight) {
+        	
+        	System.out.println("Touched Top or bottom");
             reflectVertically(); // Change vertical direction
+           
         }
 
      
@@ -71,7 +92,9 @@ public class Ball extends JPanel {
         // Repaint the entire panel (the parent container of the ball)
         getParent().repaint();
 
-        System.out.println("####################################");
+        
+        
+        return true;
     }
 
 
@@ -91,11 +114,15 @@ public class Ball extends JPanel {
         g.setColor(Color.WHITE);
         g.fillOval(0, 0, diameter, diameter);
         
-        System.out.println("____________________________________________________");
+//        System.out.println("____________________________________________________");
     }
 
 
     public Rectangle getBounds() {
         return new Rectangle(x, y, diameter, diameter);
     }
+	public int getBallDiameter() {
+		// TODO Auto-generated method stub
+		return this.diameter;
+	}
 }
