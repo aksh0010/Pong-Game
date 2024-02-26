@@ -5,7 +5,7 @@ import java.awt.event.*;
 
 public class PongGame {
     private JFrame mainframe;
-    private JPanel menu_panel;
+//    private JPanel menu_panel;
     private JMenuBar menu_bar;
     private JMenu menu;
     /*Creating Arena Panel, Left paddle, Right Paddle
@@ -68,15 +68,16 @@ public class PongGame {
         mainframe.setLocationRelativeTo(null);
 //        mainframe.setResizable(false);
 
-        menu_panel = new JPanel();
+//        menu_panel = new JPanel();
         menu_bar = new JMenuBar();
         
         scoreLabel = new JLabel("HEllo");
         scorePanel = new JPanel(new BorderLayout());
         scorePanel.add(scoreLabel);
         add_menu_to_menu_bar(menu_bar);
-        menu_panel.add(menu_bar);
-        mainframe.add(menu_panel, BorderLayout.NORTH);
+//        menu_panel.add(menu_bar);
+        mainframe.setJMenuBar(menu_bar);
+//        mainframe.add(menu_panel, BorderLayout.NORTH);
         createScoreCard();
         create_arena();
      	game_loop();
@@ -123,7 +124,7 @@ public class PongGame {
         this.divider.setBackground(Color.WHITE);
         this.divider.setOpaque(true);
         this.divider.setBounds(dividerX, 0, 2, mainframe.getHeight());
-        this.arena.add(divider);
+        this.arena.add(this.divider);
 
         this.mainframe.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
@@ -151,7 +152,7 @@ public class PongGame {
         this.initialSpeedX = 40;
         this.initialSpeedY= 40;
         
-        this.ball = new Ball(initialX, initialY, 20); // Adjust the diameter as needed
+        this.ball = new Ball(this.initialX, this.initialY, 20); // Adjust the diameter as needed
         this.arena.add(ball);
         
         this.ball.setBounds(this.initialX- ball.getBallDiameter() / 2, this.initialY - ball.getBallDiameter() / 2, ball.getBallDiameter(), ball.getBallDiameter());
@@ -316,13 +317,32 @@ public class PongGame {
         menu.add(option_speed);
         menu.add(option_quit);
 
-        bar.setBackground(Color.GREEN);
-        bar.add(menu);
+        Font menuFont = new Font("Arial", Font.BOLD, 14);
+        menu.setFont(menuFont);
+        option_start.setFont(menuFont);
+        option_restart.setFont(menuFont);
+        option_speed.setFont(menuFont);
+        option_quit.setFont(menuFont);
 
+        // Set custom colors for menu items
+        Color menuForeground = new Color(255, 255, 255); // White color
+        Color menuBackground = new Color(152, 0, 152); // Custom blue color
+        menu.setForeground(menuForeground);
+        menu.setBackground(menuBackground);
+        option_start.setForeground(menuForeground);
+        option_start.setBackground(menuBackground);
+        option_restart.setForeground(menuForeground);
+        option_restart.setBackground(menuBackground);
+        option_speed.setForeground(menuForeground);
+        option_speed.setBackground(menuBackground);
+        option_quit.setForeground(menuForeground);
+        option_quit.setBackground(menuBackground);
+        bar.setBackground(menuBackground);
+        bar.add(menu);
         option_quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	
-                mainframe.dispose();
+            	System.exit(0);
             }
         });
         
@@ -330,7 +350,20 @@ public class PongGame {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				timer.stop();
+				   // Reset scores to 0-0
+	            player1Score = 0;
+	            player2Score = 0;
+	            
+	            // Update the score card to display the new scores
+	            updateScoreCard();
+	            
+	            // Call the resetRound() method to restart the game
+	            resetRound();
+	            
+	            // Restart the timer if it's stopped
+	            if (!timer.isRunning()) {
+	                timer.start();
+	            }
 
 			}
 		});
