@@ -5,53 +5,44 @@ import java.awt.event.*;
 
 public class PongGame {
     private JFrame mainframe;
-//    private JPanel menu_panel;
     private JMenuBar menu_bar;
     private JMenu menu;
-    /*Creating Arena Panel, Left paddle, Right Paddle
-     * and the divider line
-  
+    /*Creating Arena Panel, Left paddle, Right Paddle , ScorePanel
      * */
-    private JPanel arena;
-    private JPanel leftPaddle;
-    private JPanel rightPaddle;
-    private JLabel divider;
-    
-    private JLabel scoreLabel;
-    private JPanel scorePanel;
+    private JPanel arena,scorePanel,leftPaddle ,rightPaddle;
+    /*Creating JLabel for divider line and score
+     * */
+    private JLabel divider,scoreLabel;
 
     /*
      *Creating Vars to store Coordinates
      *of left and right Paddle
      * 
      * */
-    private int leftPaddle_Y ; // Y-coordinate of the left paddle
-    private int rightPaddle_Y; // Y-coordinate of the right paddle
-    private int leftPaddle_X ; // Y-coordinate of the left paddle
-    private int rightPaddle_X ; // Y-coordinate of the right paddle
-    
+    private int leftPaddle_Y ,leftPaddle_X,rightPaddle_Y,rightPaddle_X ; 
+   
     /*Default Paddle speed
      * Will change it once we know the ball speed to make he game fair
      * */
-    private final int PADDLE_SPEED = 60; // Paddle movement speed
-    private final int DELAY =350;
+    private final int PADDLE_SPEED = 60,DELAY =350; // Paddle movement speed
+   
+    /*
+     * Creating Ball object and required parameters such as speed
+     * */
+    private Ball ball;
+    private Timer timer;
+    private int initialX ,initialY;
 
+    /*
+     * Creating vars to hold scores
+     * */
+    private int player2Score =0,player1Score=0;
+    
+    private int initialSpeedX;
+    private int initialSpeedY;
     /*
      *  Constructor to initialize the PongGame
      */
-    private Ball ball;
-    private Timer timer;
-
-    
-    private int player2Score =0;
-    private int player1Score=0;
-    
-    
-    private int initialX;
-    private int initialY;
-    private int initialSpeedX;
-    private int initialSpeedY;
-    
     public PongGame() {
         initialize();
     }
@@ -161,7 +152,9 @@ public class PongGame {
         this.mainframe.add(arena, BorderLayout.CENTER);
     
          }
-
+    /*
+     * Creating game logic inside below method
+     * */
     private void game_loop() {
     	   this.timer = new Timer(DELAY, new ActionListener() {
                public void actionPerformed(ActionEvent e) {
@@ -206,6 +199,9 @@ public class PongGame {
            });
     	this.timer.start();
     }
+    /*
+     * Creating the ScoreCard
+     * */    
     private void createScoreCard() {
         JPanel scorePanel = new JPanel(new BorderLayout());
         
@@ -213,7 +209,9 @@ public class PongGame {
         scorePanel.add(scoreLabel, BorderLayout.CENTER);
         mainframe.add(scorePanel, BorderLayout.NORTH);
     }
-
+/*
+ * Updating the ScoreCard
+ * */
     private void updateScoreCard() {
         scoreLabel.setText("Player 1: " + player1Score + "  Player 2: " + player2Score);
     }
