@@ -58,6 +58,7 @@ public class Ball extends JPanel {
         	reflectHorizontally(); // Reverse horizontal direction
             x = leftpaddle.getX() + leftpaddle.getWidth();
         	System.out.println("LeftPaddle");
+        	SoundPlayer.playSound("resources/ping.wav");
             
         } else if (rightpaddle.getBounds().intersects(getBounds())) {
             // Check for collision with the right paddle
@@ -66,20 +67,27 @@ public class Ball extends JPanel {
             // Adjust y-coordinate based on the collision point
             y = Math.max(rightpaddle.getY() - diameter, Math.min(y, rightpaddle.getY() + rightpaddle.getHeight()));
             System.out.println("RightPaddle");
+            SoundPlayer.playSound("resources/ping.wav");
         }
         // Check for collision with the left or right boundary
         else if (x <= 0 || x + diameter >= frameWidth) {
         	 System.out.println("Touched Sides");
+        	 SoundPlayer.playSound("resources/round_over.wav");
+        	 try {
+				Thread.sleep(4);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         	 return false;
-//            reflectHorizontally(); // Change horizontal direction
-           
-           
+//            reflectHorizontally(); // Change horizontal direction          
         }
 
         // Check for collision with the top or bottom boundary
         else if (y <= 0 || y + diameter >= frameHeight) {
         	
         	System.out.println("Touched Top or bottom");
+        	SoundPlayer.playSound("resources/wall_deflect.wav");
             reflectVertically(); // Change vertical direction
            
         }
@@ -91,9 +99,6 @@ public class Ball extends JPanel {
 
         // Repaint the entire panel (the parent container of the ball)
         getParent().repaint();
-
-        
-        
         return true;
     }
 
