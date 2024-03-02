@@ -206,7 +206,10 @@ public class PongGame {
         JPanel scorePanel = new JPanel(new BorderLayout());
         
         scoreLabel = new JLabel("Player 1: 0  Player 2: 0", SwingConstants.CENTER);
+       
+        scoreLabel.setForeground(new Color(220, 20, 60));
         scorePanel.add(scoreLabel, BorderLayout.CENTER);
+        
         mainframe.add(scorePanel, BorderLayout.NORTH);
     }
 /*
@@ -325,8 +328,8 @@ public class PongGame {
         // Set custom colors for menu items
         Color menuForeground = new Color(255, 255, 255); // White color
         Color menuBackground = new Color(152, 0, 152); // Custom blue color
-        menu.setForeground(menuForeground);
-        menu.setBackground(menuBackground);
+        menu.setForeground(menuBackground);
+//        menu.setBackground(menuBackground);
         option_start.setForeground(menuForeground);
         option_start.setBackground(menuBackground);
         option_restart.setForeground(menuForeground);
@@ -335,7 +338,8 @@ public class PongGame {
         option_speed.setBackground(menuBackground);
         option_quit.setForeground(menuForeground);
         option_quit.setBackground(menuBackground);
-        bar.setBackground(menuBackground);
+//        bar.setBackground(menuBackground);
+//        bar.setForeground(menuBackground);
         bar.add(menu);
         option_quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

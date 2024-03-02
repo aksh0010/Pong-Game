@@ -102,10 +102,6 @@ public class Ball extends JPanel {
         return true;
     }
 
-
-
-
-
     public void reflectHorizontally() {
         dx = -dx;
     }
