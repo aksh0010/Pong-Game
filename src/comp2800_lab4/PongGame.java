@@ -80,7 +80,7 @@ public class PongGame {
 //        menu_panel = new JPanel();
         menu_bar = new JMenuBar();
         
-        scoreLabel = new JLabel("HEllo");
+        scoreLabel = new JLabel();
         scorePanel = new JPanel(new BorderLayout());
         scorePanel.add(scoreLabel);
         add_menu_to_menu_bar(menu_bar);
@@ -126,7 +126,7 @@ public class PongGame {
         });
         
         
-        slowButton.addActionListener(new ActionListener() {
+        	slowButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
 				ball.setSpeed(INITIAL_BALL_SPEED_X-SLOW_SPEED_INCREMENT, INITIAL_BALL_SPEED_Y-SLOW_SPEED_INCREMENT);
@@ -382,12 +382,12 @@ public class PongGame {
      * 
      * */
     private void add_menu_to_menu_bar(JMenuBar bar) {
-        menu = new JMenu("Help");
+        menu = new JMenu("Settings");
       
         JMenuItem option_start = new JMenuItem("Start");
         JMenuItem option_restart = new JMenuItem("Restart");
         JMenuItem option_speed = new JMenuItem("Speed");
-        adding_speed_controls(option_speed);
+//        adding_speed_controls(option_speed);
         
         
         JMenuItem option_quit = new JMenuItem("Quit");
@@ -458,13 +458,13 @@ public class PongGame {
 			}
 		});
         
-        option_speed.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+//        option_speed.addActionListener(new ActionListener() {
+//			
+//			public void actionPerformed(ActionEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
     }
     public static void main(String[] args) {
 		// Run this program on the Event Dispatch Thread (EDT)
