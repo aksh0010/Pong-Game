@@ -4,6 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class PongGame {
+	
+	// Screen dimensions
+    private static final int SCREEN_WIDTH = 850;
+    private static final int SCREEN_HEIGHT = 750;
+
     private JFrame mainframe;
     private JMenuBar menu_bar;
     private JMenu menu;
@@ -25,21 +30,34 @@ public class PongGame {
      * Will change it once we know the ball speed to make he game fair
      * */
     private final int PADDLE_SPEED = 60,DELAY =350; // Paddle movement speed
-   
+    private static final int PADDLE_WIDTH = 20;
+    private static final int PADDLE_HEIGHT = 100;
+    // Initial ball position
+
+    // Speed adjustments
+    private static final int SLOW_SPEED_INCREMENT = 20;
+    private static final int FAST_SPEED_INCREMENT = 40;
+
+    // Initial ball speed and delay
+    private static final int INITIAL_BALL_SPEED_X = 40;
+    private static final int INITIAL_BALL_SPEED_Y = 40;
+    // Ball diameter
+    private static final int BALL_DIAMETER = 20;
+
     /*
      * Creating Ball object and required parameters such as speed
      * */
     private Ball ball;
     private Timer timer;
-    private int initialX ,initialY;
+    private int INITIAL_BALL_X_POS ,INITIAL_BALL_Y_POS;
 
     /*
      * Creating vars to hold scores
      * */
     private int player2Score =0,player1Score=0;
-    
-    private int initialSpeedX;
-    private int initialSpeedY;
+    // Score limit
+    private static final int SCORE_LIMIT = 10;
+  
     /*
      *  Constructor to initialize the PongGame
      */
@@ -53,7 +71,7 @@ public class PongGame {
     public void initialize() {
         mainframe = new JFrame();
         mainframe.setTitle("Welcome to Pong game");
-        mainframe.setSize(850, 750);
+        mainframe.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainframe.setLayout(new BorderLayout());
         mainframe.setLocationRelativeTo(null);
@@ -66,6 +84,7 @@ public class PongGame {
         scorePanel = new JPanel(new BorderLayout());
         scorePanel.add(scoreLabel);
         add_menu_to_menu_bar(menu_bar);
+        
 //        menu_panel.add(menu_bar);
         mainframe.setJMenuBar(menu_bar);
 //        mainframe.add(menu_panel, BorderLayout.NORTH);
@@ -75,7 +94,64 @@ public class PongGame {
    
     }
 
-    /*
+    private void adding_speed_controls(final JMenuItem option_speed) {
+        // Define your radio buttons
+        JRadioButton slowButton = new JRadioButton("Slow");
+        JRadioButton mediumButton = new JRadioButton("Medium");
+        JRadioButton fastButton = new JRadioButton("Fast");
+
+        // Create a button group for radio buttons to make them mutually exclusive
+        ButtonGroup speedGroup = new ButtonGroup();
+        speedGroup.add(slowButton);
+        speedGroup.add(mediumButton);
+        speedGroup.add(fastButton);
+
+        // Create a panel to hold the radio buttons
+        JPanel speedPanel = new JPanel();
+        speedPanel.setLayout(new BoxLayout(speedPanel, BoxLayout.Y_AXIS));
+        speedPanel.add(slowButton);
+        speedPanel.add(mediumButton);
+        speedPanel.add(fastButton);
+
+        // Create a popup menu and add the panel to it
+        final JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.add(speedPanel);
+
+        // Add a mouse listener to the menu item
+        option_speed.addMouseListener(new MouseAdapter() {
+            
+            public void mousePressed(MouseEvent e) {
+                popupMenu.show(option_speed, 0, option_speed.getHeight());
+            }
+        });
+        
+        
+        slowButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				ball.setSpeed(INITIAL_BALL_SPEED_X-SLOW_SPEED_INCREMENT, INITIAL_BALL_SPEED_Y-SLOW_SPEED_INCREMENT);
+				
+			}
+		});
+        
+        	mediumButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				ball.setSpeed(INITIAL_BALL_SPEED_X, INITIAL_BALL_SPEED_Y);
+				
+			}
+		}); 
+        	fastButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				ball.setSpeed(INITIAL_BALL_SPEED_X+FAST_SPEED_INCREMENT, INITIAL_BALL_SPEED_Y+FAST_SPEED_INCREMENT);
+				
+			}
+		});
+        
+    }
+
+	/*
      * Method to display the main frame
      * */
     public void show() {
@@ -102,12 +178,12 @@ public class PongGame {
 
         this.leftPaddle = new JPanel();
         this.leftPaddle.setBackground(Color.WHITE);
-        this.leftPaddle.setBounds(leftPaddle_X, leftPaddle_Y, 20, 100);
+        this.leftPaddle.setBounds(leftPaddle_X, leftPaddle_Y, PADDLE_WIDTH, PADDLE_HEIGHT);
         this.arena.add(leftPaddle);
 
         this.rightPaddle = new JPanel();
         this.rightPaddle.setBackground(Color.WHITE);
-        this.rightPaddle.setBounds(rightPaddle_X, rightPaddle_Y, 20, 100);
+        this.rightPaddle.setBounds(rightPaddle_X, rightPaddle_Y, PADDLE_WIDTH, PADDLE_HEIGHT);
         this.arena.add(rightPaddle);
 
         int dividerX = (mainframe.getWidth() / 2) - 1;
@@ -138,15 +214,14 @@ public class PongGame {
             }
         });
         
-       this.initialX=mainframe.getWidth() / 2;
-        this.initialY =mainframe.getHeight() / 2;
-        this.initialSpeedX = 40;
-        this.initialSpeedY= 40;
+        this.INITIAL_BALL_X_POS=mainframe.getWidth() / 2;
+        this.INITIAL_BALL_Y_POS =mainframe.getHeight() / 2;
+
         
-        this.ball = new Ball(this.initialX, this.initialY, 20); // Adjust the diameter as needed
+        this.ball = new Ball(this.INITIAL_BALL_X_POS, this.INITIAL_BALL_Y_POS, BALL_DIAMETER); // Adjust the diameter as needed
         this.arena.add(ball);
         
-        this.ball.setBounds(this.initialX- ball.getBallDiameter() / 2, this.initialY - ball.getBallDiameter() / 2, ball.getBallDiameter(), ball.getBallDiameter());
+        this.ball.setBounds(this.INITIAL_BALL_X_POS- ball.getBallDiameter() / 2, this.INITIAL_BALL_Y_POS - ball.getBallDiameter() / 2, ball.getBallDiameter(), ball.getBallDiameter());
         this.ball.repaint();
         this.arena.repaint();
         this.mainframe.add(arena, BorderLayout.CENTER);
@@ -161,7 +236,7 @@ public class PongGame {
                	boolean GAME_ON = ball.move(mainframe.getWidth(), mainframe.getHeight(),leftPaddle,rightPaddle); // Call the move() method of the ball
                   
                	
-	               	 if (player1Score==10 || player2Score ==10) {
+	               	 if (player1Score==SCORE_LIMIT || player2Score ==SCORE_LIMIT) {
 	              	   timer.stop();
 	              	
 	                 }
@@ -225,7 +300,7 @@ public class PongGame {
      * */
     private void resetRound() {
         // Reset the ball's position and speed
-        ball.reset(mainframe.getWidth() / 2, mainframe.getHeight() / 2, 40, 40);
+        ball.reset(mainframe.getWidth() / 2, mainframe.getHeight() / 2, INITIAL_BALL_SPEED_X, INITIAL_BALL_SPEED_Y);
 
         // Reset paddle positions
         leftPaddle_Y = (mainframe.getHeight() - 100) / 2;
@@ -248,8 +323,8 @@ public class PongGame {
         leftPaddle_Y = (leftPaddle_Y * mainframe.getHeight()) / oldHeight;
         rightPaddle_Y = (rightPaddle_Y * mainframe.getHeight()) / oldHeight;
 
-        leftPaddle.setBounds(20, leftPaddle_Y, 20, 100);
-        rightPaddle.setBounds(mainframe.getWidth() - 40, rightPaddle_Y, 20, 100);
+        leftPaddle.setBounds(20, leftPaddle_Y,PADDLE_WIDTH, PADDLE_HEIGHT);
+        rightPaddle.setBounds(mainframe.getWidth() - 40, rightPaddle_Y,PADDLE_WIDTH, PADDLE_HEIGHT);
 
         int dividerX = (mainframe.getWidth() / 2) - 1;
         divider.setBounds(dividerX, 0, 2, mainframe.getHeight());
@@ -312,7 +387,12 @@ public class PongGame {
         JMenuItem option_start = new JMenuItem("Start");
         JMenuItem option_restart = new JMenuItem("Restart");
         JMenuItem option_speed = new JMenuItem("Speed");
+        adding_speed_controls(option_speed);
+        
+        
         JMenuItem option_quit = new JMenuItem("Quit");
+        
+        
         menu.add(option_start);
         menu.add(option_restart);
         menu.add(option_speed);

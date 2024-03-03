@@ -7,7 +7,9 @@ import javax.swing.JPanel;
 
 public class Ball extends JPanel {
 	
-    private static final int BALL_SPEED = 20;
+	private static final int BALL_SPEED = 20;
+    private static final int MAX_RANDOM_DIRECTION = 3;
+    private static final int MIN_RANDOM_DIRECTION = -1;
 	private int x, y;
 	private int diameter;
     private int dx = 1, dy = 1;
@@ -18,17 +20,15 @@ public class Ball extends JPanel {
         this.diameter = diameter;
         setPreferredSize(new Dimension(diameter, diameter));
         setBounds(this.x, this.y, getPreferredSize().width, getPreferredSize().height);
+
         // Generate random initial directions
         Random random = new Random();
-//        dx = random.nextBoolean() ? 1 : -1; // Randomly choose between 1 and -1
-//        dy = random.nextBoolean() ? 1 : -1; // Randomly choose between 1 and -1
-//        
-        dx = random.nextInt(3) - 1;
-        dy = random.nextInt(3) - 1;
-        
+        dx = random.nextInt(MAX_RANDOM_DIRECTION - MIN_RANDOM_DIRECTION) + MIN_RANDOM_DIRECTION;
+        dy = random.nextInt(MAX_RANDOM_DIRECTION - MIN_RANDOM_DIRECTION) + MIN_RANDOM_DIRECTION;
+
         while (dx == 0 || dy == 0) {
-            dx = random.nextInt(3) - 1;
-            dy = random.nextInt(3) - 1;
+            dx = random.nextInt(MAX_RANDOM_DIRECTION - MIN_RANDOM_DIRECTION) + MIN_RANDOM_DIRECTION;
+            dy = random.nextInt(MAX_RANDOM_DIRECTION - MIN_RANDOM_DIRECTION) + MIN_RANDOM_DIRECTION;
         }
     }
     public void reset(int initialX, int initialY, int initialSpeedX, int initialSpeedY) {
@@ -39,6 +39,12 @@ public class Ball extends JPanel {
         this.speedX = initialSpeedX;
         this.speedY = initialSpeedY;
     }
+    
+    public void setSpeed(int speedX, int speedY) {
+        this.speedX = speedX;
+        this.speedY = speedY;
+    }
+
     public int getX() {
         return x;
     }
