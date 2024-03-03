@@ -1,4 +1,4 @@
-package comp2800_lab4;
+package package_pong_game;
 
 import java.awt.*;
 import java.util.Random;

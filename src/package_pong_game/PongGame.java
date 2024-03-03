@@ -1,4 +1,4 @@
-package comp2800_lab4;
+package package_pong_game;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,7 +7,7 @@ public class PongGame {
 	
 	// Screen dimensions
     private static final int SCREEN_WIDTH = 850;
-    private static final int SCREEN_HEIGHT = 750;
+    private static final int SCREEN_HEIGHT = 700;
 
     private JFrame mainframe;
     private JMenuBar menu_bar;
@@ -272,7 +272,7 @@ public class PongGame {
                        }
                	}                         
            });
-    	this.timer.start();
+//    	this.timer.start();
     }
     /*
      * Creating the ScoreCard
@@ -466,16 +466,6 @@ public class PongGame {
 //			}
 //		});
     }
-    public static void main(String[] args) {
-		// Run this program on the Event Dispatch Thread (EDT)
-		EventQueue.invokeLater(new Runnable() {
-			//creating instance of mainframe and using show method to set frame to visible
-			public void run() {	
-				 	//Creating PieChart instance and then calling the show method to setvisibility true
-					PongGame game =new PongGame();
-					game.show();
-			}
-		});
-	}
+
    
 }

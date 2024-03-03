@@ -1,4 +1,4 @@
-package comp2800_lab4;
+package package_pong_game;
 import javax.swing.JFrame;
 import java.awt.EventQueue;
 
@@ -9,7 +9,7 @@ public class Launcher {
 		EventQueue.invokeLater(new Runnable() {
 			//creating instance of mainframe and using show method to set frame to visible
 			public void run() {	
-				 	//Creating PieChart instance and then calling the show method to setvisibility true
+				 	//Creating PongGame instance and then calling the show method to setvisibility true
 					PongGame game =new PongGame();
 					game.show();
 			}
